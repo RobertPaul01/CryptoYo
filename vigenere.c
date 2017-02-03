@@ -22,6 +22,7 @@ void encrypt(char* message, char* key, int keyLength, int messageLength) {
 	int* keyValues = getKeyValues(key, keyLength);
 	for (int i = 0; i < messageLength; i++)
 		message[i] =  (((message[i]-START) + (keyValues[i%keyLength]-START))%(RANGE))+START;
+	free(keyValues);
 }
 
 void decrypt(char* message, char* key, int keyLength, int messageLength) {
@@ -34,6 +35,7 @@ void decrypt(char* message, char* key, int keyLength, int messageLength) {
 		else
 			message[i] = (newVal%(RANGE))+START;
 	}
+	free(keyValues);
 }
 
 void getChoice(char* choice) {
