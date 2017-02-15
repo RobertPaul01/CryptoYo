@@ -9,6 +9,6 @@
 // Define the max length of message and key
 #define MAX_LENGTH 1000
 
-void getChoice(char* choice);
+void get_choice(char* choice);
 
 #endif

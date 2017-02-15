@@ -21,7 +21,7 @@ void decrypt(char* message, char* key, int key_length, int message_length) {
 	}
 }
 
-void getInput(char* message, char* key, int size, int* message_length, int* key_length) {
+void get_input(char* message, char* key, int size, int* message_length, int* key_length) {
 	printf("What is the text? ");
 	fgets(message, size, stdin);
 	printf("What is the key? ");
@@ -32,12 +32,12 @@ void getInput(char* message, char* key, int size, int* message_length, int* key_
 	*key_length = strlen(key);
 }
 
-void clearInput(char* message, char* key, int message_length, int key_length) {
+void clear_input(char* message, char* key, int message_length, int key_length) {
 	memset(message,0,message_length);
 	memset(key,0,key_length);
 }
 
-void freeInput(char* message, char* key) {
+void free_input(char* message, char* key) {
 	free(message);
 	free(key);
 }
@@ -52,20 +52,20 @@ void vigenere() {
 	key = (char*)malloc(size);
 	while (1) {
 		printf("Enter 0 for encryption, 1 for decryption, or 2 to choose a different method: ");
-		getChoice(&choice);
+		get_choice(&choice);
 		if (choice == '2') 
 			break;
 		else if (choice != '0' && choice != '1') {
 			printf("Please only enter 0, 1, or 2.\n");
 			continue;
 		}
-		getInput(message, key, size, &message_length, &key_length);
+		get_input(message, key, size, &message_length, &key_length);
 		if (choice == '0') 		
 			encrypt(message, key, key_length, message_length);				
 		else if (choice == '1')
 			decrypt(message, key, key_length, message_length);	
 		printf("New message is: %s\n\n", message);
-		clearInput(message, key, message_length, key_length);
+		clear_input(message, key, message_length, key_length);
 	}
-	freeInput(message, key);
+	free_input(message, key);
 }

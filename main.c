@@ -7,16 +7,16 @@ typedef enum {
 	VIGENERE,
 	EXIT,
 	INVALID
-} cryptMethod;
+} crypt_method;
 
-void getMethod(cryptMethod* selection) {
+void get_method(crypt_method* selection) {
 	char choice;
 	printf("What encryption do you want to use?\n");
 	printf("A) Affine\n");	
 	printf("B) Vigenere\n");
 	printf("Q) Exit program\n");
 	printf("Selection: ");
-	getChoice(&choice);
+	get_choice(&choice);
 	switch (choice) {
 		case 'A': 
 			*selection = AFFINE;
@@ -33,10 +33,10 @@ void getMethod(cryptMethod* selection) {
 }
 
 int main(int argc, char** argv) {		
-	cryptMethod method;
+	crypt_method method;
 	int run = 1;
 	while (run) {
-		getMethod(&method);
+		get_method(&method);
 		switch (method) {
 			case AFFINE:	
 				break;
