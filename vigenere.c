@@ -10,32 +10,21 @@
 // Define the max length of message and key
 #define MAX_LENGTH 1000
 
-int* getKeyValues(char* key, int keyLength) {
-	int* keyValues = (int*) malloc(keyLength);
-	for (int i = 0; i < keyLength; i++)
-		keyValues[i] = (int)key[i];
-	return keyValues;
-}
-
 void encrypt(char* message, char* key, int keyLength, int messageLength) {
 	printf("encrypting: \"%s\"\n\n", message);
-	int* keyValues = getKeyValues(key, keyLength);
 	for (int i = 0; i < messageLength; i++)
-		message[i] =  (((message[i]-START) + (keyValues[i%keyLength]-START))%(RANGE))+START;
-	free(keyValues);
+		message[i] =  (((message[i]-START) + (key[i%keyLength]-START))%(RANGE))+START;
 }
 
 void decrypt(char* message, char* key, int keyLength, int messageLength) {
 	printf("decrypting: \"%s\"\n\n", message);
-	int* keyValues = getKeyValues(key, keyLength);
 	for (int i = 0; i < messageLength; i++) {
-		int newVal = (message[i]-START) - (keyValues[i%keyLength]-START);
+		int newVal = (message[i]-START) - (key[i%keyLength]-START);
 		if (newVal < 0) 
 			message[i] = END + newVal;
 		else
 			message[i] = (newVal%(RANGE))+START;
 	}
-	free(keyValues);
 }
 
 void getChoice(char* choice) {
@@ -79,7 +68,7 @@ void UI() {
 		if (choice == '2') 
 			break;
 		else if (choice != '0' && choice != '1') {
-			printf("Please only enter 0, 1, or 2.");
+			printf("Please only enter 0, 1, or 2.\n");
 			continue;
 		}
 		getInput(message, key, size, &messageLength, &keyLength);
