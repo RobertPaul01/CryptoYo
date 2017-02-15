@@ -1,52 +1,40 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "vigenere.h"
+#include "common.h"
 
-// These will define the ASCII range used
-#define START ' '
-#define END '~'
-#define RANGE END-START
-
-// Define the max length of message and key
-#define MAX_LENGTH 1000
-
-void encrypt(char* message, char* key, int keyLength, int messageLength) {
-	printf("encrypting: \"%s\"\n\n", message);
-	for (int i = 0; i < messageLength; i++)
-		message[i] =  (((message[i]-START) + (key[i%keyLength]-START))%(RANGE))+START;
+void encrypt(char* message, char* key, int key_length, int message_length) {
+	printf("encrypting: \"%s\"\n", message);
+	for (int i = 0; i < message_length; i++)
+		message[i] =  (((message[i]-START) + (key[i%key_length]-START))%(RANGE))+START;
 }
 
-void decrypt(char* message, char* key, int keyLength, int messageLength) {
-	printf("decrypting: \"%s\"\n\n", message);
-	for (int i = 0; i < messageLength; i++) {
-		int newVal = (message[i]-START) - (key[i%keyLength]-START);
-		if (newVal < 0) 
-			message[i] = END + newVal;
+void decrypt(char* message, char* key, int key_length, int message_length) {
+	printf("decrypting: \"%s\"\n", message);
+	for (int i = 0; i < message_length; i++) {
+		int new_val = (message[i]-START) - (key[i%key_length]-START);
+		if (new_val < 0) 
+			message[i] = END + new_val;
 		else
-			message[i] = (newVal%(RANGE))+START;
+			message[i] = (new_val%(RANGE))+START;
 	}
 }
 
-void getChoice(char* choice) {
-	*choice = getchar();
-	char ch;
-	while ((ch = getchar()) != '\n' && ch != EOF);
-}
-
-void getInput(char* message, char* key, int size, int* messageLength, int* keyLength) {
+void getInput(char* message, char* key, int size, int* message_length, int* key_length) {
 	printf("What is the text? ");
 	fgets(message, size, stdin);
 	printf("What is the key? ");
 	fgets(key, size, stdin);
 	message[strcspn(message, "\r\n")] = 0;
 	key[strcspn(key, "\r\n")] = 0;	
-	*messageLength = strlen(message);
-	*keyLength = strlen(key);
+	*message_length = strlen(message);
+	*key_length = strlen(key);
 }
 
-void clearInput(char* message, char* key, int messageLength, int keyLength) {
-	memset(message,0,messageLength);
-	memset(key,0,keyLength);
+void clearInput(char* message, char* key, int message_length, int key_length) {
+	memset(message,0,message_length);
+	memset(key,0,key_length);
 }
 
 void freeInput(char* message, char* key) {
@@ -54,16 +42,16 @@ void freeInput(char* message, char* key) {
 	free(key);
 }
 
-void UI() {
+void vigenere() {
 	char* message;
 	char* key;
 	int size = sizeof(char)*MAX_LENGTH;
 	char choice;
-	int messageLength, keyLength;
+	int message_length, key_length;
 	message = (char*)malloc(size);
 	key = (char*)malloc(size);
 	while (1) {
-		printf("Enter 0 for encryption, 1 for decryption, or 2 to exit: ");
+		printf("Enter 0 for encryption, 1 for decryption, or 2 to choose a different method: ");
 		getChoice(&choice);
 		if (choice == '2') 
 			break;
@@ -71,18 +59,13 @@ void UI() {
 			printf("Please only enter 0, 1, or 2.\n");
 			continue;
 		}
-		getInput(message, key, size, &messageLength, &keyLength);
+		getInput(message, key, size, &message_length, &key_length);
 		if (choice == '0') 		
-			encrypt(message, key, keyLength, messageLength);				
+			encrypt(message, key, key_length, message_length);				
 		else if (choice == '1')
-			decrypt(message, key, keyLength, messageLength);	
-		printf("New message is: %s\n", message);
-		clearInput(message, key, messageLength, keyLength);
+			decrypt(message, key, key_length, message_length);	
+		printf("New message is: %s\n\n", message);
+		clearInput(message, key, message_length, key_length);
 	}
 	freeInput(message, key);
-}
-
-int main(int argc, char** argv) {		
-	UI();
-	return 0;
 }
