@@ -26,8 +26,10 @@ void get_input(char* message, char* key, int size, int* message_length, int* key
 	fgets(message, size, stdin);
 	printf("What is the key? ");
 	fgets(key, size, stdin);
+	// remove return chars
 	message[strcspn(message, "\r\n")] = 0;
 	key[strcspn(key, "\r\n")] = 0;	
+	// set length variables
 	*message_length = strlen(message);
 	*key_length = strlen(key);
 }
@@ -51,20 +53,22 @@ void vigenere() {
 	message = (char*)malloc(size);
 	key = (char*)malloc(size);
 	while (1) {
-		printf("Enter 0 for encryption, 1 for decryption, or 2 to choose a different method: ");
+		printf("\nVigenere -\nE) Encryption\nD) Decryption\nQ) Choose a different method\n");
+		printf("Selection: ");
 		get_choice(&choice);
-		if (choice == '2') 
+		if (choice == 'Q') {
+			printf("\n"); 
 			break;
-		else if (choice != '0' && choice != '1') {
-			printf("Please only enter 0, 1, or 2.\n");
+		} else if (choice != 'E' && choice != 'D') {
+			printf("Please only enter E, D, or Q.\n");
 			continue;
 		}
 		get_input(message, key, size, &message_length, &key_length);
-		if (choice == '0') 		
+		if (choice == 'E') 		
 			encrypt(message, key, key_length, message_length);				
-		else if (choice == '1')
+		else if (choice == 'D')
 			decrypt(message, key, key_length, message_length);	
-		printf("New message is: %s\n\n", message);
+		printf("New message is: %s\n", message);
 		clear_input(message, key, message_length, key_length);
 	}
 	free_input(message, key);

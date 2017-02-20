@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include "affine.h"
 #include "vigenere.h"
 #include "common.h"
 
@@ -39,6 +40,7 @@ int main(int argc, char** argv) {
 		get_method(&method);
 		switch (method) {
 			case AFFINE:	
+				affine();
 				break;
 			case VIGENERE:
 				vigenere();
