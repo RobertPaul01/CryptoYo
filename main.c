@@ -52,6 +52,7 @@ int main(int argc, char** argv) {
 			case INVALID:
 				printf("Invalid\n");
 		}
+		printf("\n");
 	}
 	return 0;
 }
