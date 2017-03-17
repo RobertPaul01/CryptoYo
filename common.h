@@ -10,6 +10,8 @@
 
 void get_choice(char* choice);
 
+int find_inverse(long a, long b);
+
 int is_rel_prime(long a, long b);
 
 #endif

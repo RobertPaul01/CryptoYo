@@ -6,18 +6,23 @@
 
 void encrypt_vigenre(char* message, char* key, int key_length, int message_length) {
 	printf("encrypting: \"%s\"\n", message);
-	for (int i = 0; i < message_length; i++)
-		message[i] =  (((message[i]-START) + (key[i%key_length]-START))%(RANGE))+START;
+	for (int i = 0; i < message_length; i++) {
+		int key_val = key[i%key_length];
+		int new_val = (((message[i]-START) + (key_val-START))%(RANGE)) + START;
+		message[i] = new_val; 
+	}
 }
 
 void decrypt_vigenere(char* message, char* key, int key_length, int message_length) {
 	printf("decrypting: \"%s\"\n", message);
 	for (int i = 0; i < message_length; i++) {
-		int new_val = (message[i]-START) - (key[i%key_length]-START);
-		if (new_val < 0) 
+		int key_val = key[i%key_length];
+		int new_val = (message[i]-START) - (key_val-START);
+		if (new_val < 0) {
 			message[i] = END + new_val;
-		else
+		} else {
 			message[i] = (new_val%(RANGE))+START;
+		}
 	}
 }
 
