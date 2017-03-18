@@ -57,7 +57,7 @@ void affine() {
 		message_length = strlen(message);
 		// perform (en/de)crpytion
 		if (choice == 'E') 		
-			encrypt_affine(message, alpha, beta, message_length);				
+			encrypt_affine(message, alpha, beta, message_length);	
 		else if (choice == 'D')
 			decrypt_affine(message, alpha, beta, message_length);	
 		printf("New message is: %s\n", message);
