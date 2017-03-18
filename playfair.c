@@ -1,3 +1,7 @@
+// NOTE: This program is assuming that the range of characters is A-Z.
+// If that is not the range set in common.h, this cryptosystem will not
+// work as intended.
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -10,7 +14,7 @@ typedef enum {
 	SAME_COL = 2
 } pf_rel;
 
-// This matrix represents the lookup relations for a typical playfair cipher.
+// This matrix represents the lookup relations for the playfair cipher table.
 // For two letters A and B, relation[A][B] is the relation between A and B 
 // in the playfair table.
 int relation[27][27] = 
@@ -41,7 +45,7 @@ int relation[27][27] =
 	{0,0,0,2,0,2,0,0,0,0,0,0,2,0,0,0,0,0,0,2,1,1,1,1,0,1},
 	{1,0,0,0,2,1,0,0,2,0,0,1,0,2,0,1,0,0,0,0,2,0,0,0,1,0}};
 
-// This matrix stores the indecies for every letter in the playfair table
+// This matrix stores the indices for every letter in the playfair table
 char indx[27][2] = {{0,2},{1,2},{1,3},
 		{1,4},{2,0},{0,4},
 		{2,1},{2,2},{1,0},
