@@ -1,11 +1,4 @@
-#include <stdio.h>
 #include "common.h"
-
-void get_choice(char* choice) {
-	*choice = getchar();
-	char ch;
-	while ((ch = getchar()) != '\n' && ch != EOF);
-}
 
 int gcd(long a, long b) {
 	if (a >= b) {

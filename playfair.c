@@ -1,29 +1,26 @@
-// NOTE: This program is assuming that the range of characters is A-Z.
+// NOTE: These functions are assuming that the range of characters is A-Z.
 // If that is not the range set in common.h, this cryptosystem will not
 // work as intended.
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #include "playfair.h"
 #include "common.h"
 
 typedef enum {	
-	NONE = 0,
-	SAME_ROW = 1,
-	SAME_COL = 2
+	NONE,
+	SAME_ROW,
+	SAME_COL
 } pf_rel;
 
 // This matrix stores the indices for every letter in the playfair table
 int indx[27][2] = {{0,2},{1,2},{1,3},
 		{1,4},{2,0},{0,4},
-		{2,1},{2,2},{1,0},{1,0},
-		{2,3},{0,1},{2,4},
-		{3,0},{3,1},{0,0},
-		{3,2},{1,1},{3,3},
-		{3,4},{4,0},{4,1},
-		{4,2},{4,3},{0,3},
-		{4,4}};
+		{2,1},{2,2},{1,0},
+		{1,0},{2,3},{0,1},
+		{2,4},{3,0},{3,1},
+		{0,0},{3,2},{1,1},
+		{3,3},{3,4},{4,0},
+		{4,1},{4,2},{4,3},
+		{0,3},{4,4}};
 
 // The playfair table
 char M[5][5] = {{'P','L','A','Y','F'},
@@ -128,13 +125,18 @@ void decrypt_playfair(char* message, int message_length) {
 	}
 }
 
-void playfair() {
-
+int playfair_test_cases() {
+	return 1;
 }
 
+void playfair_test() {
+	printf("Playfair tests: %s\n", playfair_test_cases() ? "SUCCEEDED" : "FAILED");
+}
+
+/*
 int main() {
 	char test[] = {'E','G','M','N','F','Q','Q','M','K','N','C','\0'};
 	decrypt_playfair(&test[0], 11);
 	printf("%s\n", test);
 	return 0;
-}
+}*/

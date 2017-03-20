@@ -1,14 +1,13 @@
 #ifndef COMMON_H_
 #define COMMON_H_
 
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+
 #define START 'A'
 #define END 'Z'
 #define RANGE END-START
-
-// Define the max length of message and key
-#define MAX_LENGTH 10000
-
-void get_choice(char* choice);
 
 int find_inverse(long a, long b);
 

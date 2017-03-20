@@ -1,4 +1,4 @@
 default:
-	cc -o crypto_yo main.c affine.c vigenere.c playfair.c common.c
+	cc -o run_tests run_tests.c affine.c vigenere.c playfair.c common.c
 clean:
-	rm crypto_yo
+	rm run_tests
