@@ -14,41 +14,10 @@ typedef enum {
 	SAME_COL = 2
 } pf_rel;
 
-// This matrix represents the lookup relations for the playfair cipher table.
-// For two letters A and B, relation[A][B] is the relation between A and B 
-// in the playfair table.
-int relation[27][27] = 
-	{{0,2,0,0,0,1,0,2,0,0,0,1,0,0,0,1,2,0,0,0,0,0,2,0,1,0},
-	{2,0,1,1,0,0,0,2,1,0,0,0,0,0,0,0,2,1,0,0,0,0,2,0,0,0},
-	{0,1,0,1,0,0,0,0,1,0,2,0,0,0,0,0,0,1,2,0,0,0,0,2,2,0},
-	{0,1,1,0,0,2,0,0,1,0,0,0,2,0,0,0,0,1,0,2,0,0,0,0,0,2},
-	{0,0,0,0,0,0,1,1,2,0,1,0,1,2,0,2,0,0,0,0,2,0,0,0,0,0},
-	{1,0,0,2,0,0,0,0,0,0,0,1,2,0,0,1,0,0,0,2,0,0,0,0,1,2},
-	{0,0,0,0,1,0,0,1,0,0,1,2,1,0,2,0,0,2,0,0,0,2,0,0,0,0},
-	{2,2,0,0,1,0,1,0,0,0,1,0,1,0,0,0,2,0,0,0,0,0,2,0,0,0},
-	{0,1,1,1,2,0,0,0,0,0,0,0,0,2,0,2,0,1,0,0,2,0,0,0,0,0},
-	{0,0,2,0,1,0,1,1,0,0,1,0,1,0,0,0,0,0,2,0,0,0,0,2,2,0},
-	{1,0,0,0,0,1,2,0,0,0,0,1,0,0,2,1,0,2,0,0,0,2,0,0,1,0},
-	{0,0,0,2,1,2,1,1,0,0,1,0,1,0,0,0,0,0,0,2,0,0,0,0,0,2},
-	{0,0,0,0,2,0,0,0,2,0,0,0,0,1,1,2,1,0,1,1,2,0,0,0,0,0},
-	{0,0,0,0,0,0,2,0,0,0,0,2,0,0,1,0,1,2,1,1,0,2,0,0,0,0},
-	{1,0,0,0,2,1,0,0,2,0,0,1,0,2,0,1,0,0,0,0,2,0,0,0,1,0},
-	{2,2,0,0,0,0,0,2,0,0,0,0,0,1,1,0,1,0,1,1,0,0,2,0,0,0},
-	{0,1,1,1,0,0,2,0,1,0,0,2,0,0,2,0,0,1,0,0,0,2,0,0,0,0},
-	{0,0,2,0,0,0,0,0,0,0,2,0,0,1,1,0,1,0,1,1,0,0,0,2,2,0},
-	{0,0,0,2,0,2,0,0,0,0,0,0,2,1,1,0,1,0,0,1,0,0,0,0,0,2},
-	{0,0,0,0,2,0,0,0,2,0,0,0,0,2,0,2,0,0,0,0,1,1,1,1,0,1},
-	{0,0,0,0,0,0,2,0,0,0,0,2,0,0,2,0,0,2,0,0,0,1,1,1,0,1},
-	{2,2,0,0,0,0,0,2,0,0,0,0,0,0,0,0,2,0,0,0,1,0,1,1,0,1},
-	{0,0,2,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,2,0,1,1,0,1,2,1},
-	{1,0,2,0,0,1,0,0,0,0,2,1,0,0,0,1,0,0,2,0,0,0,0,0,1,0},
-	{0,0,0,2,0,2,0,0,0,0,0,0,2,0,0,0,0,0,0,2,1,1,1,1,0,1},
-	{1,0,0,0,2,1,0,0,2,0,0,1,0,2,0,1,0,0,0,0,2,0,0,0,1,0}};
-
 // This matrix stores the indices for every letter in the playfair table
-char indx[27][2] = {{0,2},{1,2},{1,3},
+int indx[27][2] = {{0,2},{1,2},{1,3},
 		{1,4},{2,0},{0,4},
-		{2,1},{2,2},{1,0},
+		{2,1},{2,2},{1,0},{1,0},
 		{2,3},{0,1},{2,4},
 		{3,0},{3,1},{0,0},
 		{3,2},{1,1},{3,3},
@@ -63,18 +32,109 @@ char M[5][5] = {{'P','L','A','Y','F'},
 	    	{'N','O','Q','S','T'},
 	    	{'U','V','W','X','Z'}};
 
+int* get_indx(char a) {
+	return &indx[a-'A'][0];
+}
+
 pf_rel find_relations(char a, char b) {
-	return relation[a-'A'][b-'A'];
+	if (a == b)
+		return NONE;
+	int* indx_a = get_indx(a);
+	int* indx_b = get_indx(b);
+	if (indx_a[0] == indx_b[0]) {
+		return SAME_ROW;
+	} else if (indx_a[1] == indx_b[1]) {
+		return SAME_COL;
+	} else {
+		return NONE;
+	}
+}
+
+void encrypt_group(char* group) {
+	pf_rel rel = find_relations(group[0], group[1]);
+	int* indx_a = get_indx(group[0]);
+	int* indx_b = get_indx(group[1]);
+	switch (rel) {
+		case NONE: {
+			group[0] = M[indx_a[0]][indx_b[1]];
+			group[1] = M[indx_b[0]][indx_a[1]];
+			break;
+		}
+		case SAME_ROW: {
+			group[0] = M[indx_a[0]][(indx_a[1]+1)%5];
+			group[1] = M[indx_b[0]][(indx_b[1]+1)%5];
+			break;
+		}
+		case SAME_COL: {
+			group[0] = M[(indx_a[0]+1)%5][indx_a[1]];
+			group[1] = M[(indx_b[0]+1)%5][indx_b[1]];
+			break;
+		}
+	}
+}
+
+int subtract_1_m5(int x) {
+	return (--x == -1 ? 4 : x);
+}
+
+void decrypt_group(char* group) {
+	pf_rel rel = find_relations(group[0], group[1]);
+	int* indx_a = get_indx(group[0]);
+	int* indx_b = get_indx(group[1]);
+	switch (rel) {
+		case NONE: {
+			group[0] = M[indx_a[0]][indx_b[1]];
+			group[1] = M[indx_b[0]][indx_a[1]];
+			break;
+		}
+		case SAME_ROW: {
+			group[0] = M[indx_a[0]][subtract_1_m5(indx_a[1])];
+			group[1] = M[indx_b[0]][subtract_1_m5(indx_b[1])];
+			break;
+		}
+		case SAME_COL: {
+			group[0] = M[subtract_1_m5(indx_a[0])][indx_a[1]];
+			group[1] = M[subtract_1_m5(indx_b[0])][indx_b[1]];
+			break;
+		}
+	}
 }
 
 void encrypt_playfair(char* message, int message_length) {
-
+	char group[2];
+	for (int i = 0; i < message_length; i++) {
+		if (i%2==0) {
+			group[0] = message[i];
+		} else {
+			group[1] = message[i];
+			encrypt_group(group);
+			message[i-1] = group[0];
+			message[i] = group[1];
+		}
+	}
 }
 
 void decrypt_playfair(char* message, int message_length) {
-
+	char group[2];
+	for (int i = 0; i < message_length; i++) {
+		if (i%2==0) {
+			group[0] = message[i];
+		} else {
+			group[1] = message[i];
+			decrypt_group(group);
+			message[i-1] = group[0];
+			message[i] = group[1];
+		}
+	}
 }
 
 void playfair() {
 
+}
+
+int main() {
+	char test[] = {'E','G','M','N','F','Q','Q','M','K','N','C','\0'};
+	decrypt_playfair(&test[0], 11);
+	printf("%s\n", test);
+	return 0;
 }
