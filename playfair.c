@@ -24,11 +24,11 @@ int indx[27][2] = {{0,2},{1,2},{1,3},
 		{0,3},{4,4}};
 
 // The playfair table
-char M[5][5] = {{'P','L','A','Y','F'},
+char M[5][5];/* = {{'P','L','A','Y','F'},
 	    	{'I','R','B','C','D'},
 	    	{'E','G','H','K','M'},
 	    	{'N','O','Q','S','T'},
-	    	{'U','V','W','X','Z'}};
+	    	{'U','V','W','X','Z'}};*/
 
 int* get_indx(char a) {
 	return &indx[a-'A'][0];
@@ -47,6 +47,43 @@ pf_rel find_relations(char a, char b) {
 		return SAME_COL;
 	} else {
 		return NONE;
+	}
+}
+
+void init_key(char* key) {
+	int letters[26];
+	int key_length = strlen(key);
+	int row = 0;
+	int col = 0;
+	for (int i = 0; i < key_length; i++) {
+		if (letters[key[i]-'A'] != 1) {
+			M[row][col] = key[i];
+			col++;
+			if (col == 5) {
+				if (row == 4)
+					break;
+				col = 0;
+				row++;
+			}
+			letters[key[i]-'A'] = 1;
+		}
+	}
+	int empty_indx = 0;
+	for (; row < 5; row++) {
+		for (; col < 5; col++) {
+			while (letters[empty_indx] == 1 || empty_indx+'A' == 'J')
+				empty_indx++;
+			M[row][col] = (char)(empty_indx+'A');
+			letters[empty_indx] = 1;
+			empty_indx++;
+		}
+		col=0;
+	}
+	for (int i = 0; i < 5; i++) {
+		for (int j = 0; j < 5; j++) {
+			printf("%c ", M[i][j]);
+		}
+		printf("\n");
 	}
 }
 
@@ -113,7 +150,7 @@ void decrypt_group(char* group) {
 void encrypt_playfair(char* message, int message_length) {
 	char group[2];
 	int count = 0;
-	int space_offset = 0;
+	int space_offset = 1;
 	for (int i = 0; i < message_length; i++) {
 		if (message[i] == ' ') {
 			space_offset++;
@@ -136,7 +173,7 @@ void encrypt_playfair(char* message, int message_length) {
 void decrypt_playfair(char* message, int message_length) {
 	char group[2];
 	int count = 0;
-	int space_offset = 0;
+	int space_offset = 1;
 	for (int i = 0; i < message_length; i++) {
 		if (message[i] == ' ') {
 			space_offset++;
@@ -165,6 +202,7 @@ void playfair_test() {
 }
 
 int main() {
+	init_key("PLAYFAIR");
 	char test[100] = "WHAT IS GOING ON MATE JJJIIIIJJJIJII";
 	int len = strlen(test);
 	printf("%s\n", test);
