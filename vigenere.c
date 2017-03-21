@@ -2,7 +2,6 @@
 #include "common.h"
 
 void encrypt_vigenre(char* message, char* key, int key_length, int message_length) {
-	printf("encrypting: \"%s\"\n", message);
 	for (int i = 0; i < message_length; i++) {
 		int key_val = key[i%key_length];
 		int new_val = (((message[i]-START) + (key_val-START))%(RANGE)) + START;
@@ -11,7 +10,6 @@ void encrypt_vigenre(char* message, char* key, int key_length, int message_lengt
 }
 
 void decrypt_vigenere(char* message, char* key, int key_length, int message_length) {
-	printf("decrypting: \"%s\"\n", message);
 	for (int i = 0; i < message_length; i++) {
 		int key_val = key[i%key_length];
 		int new_val = (message[i]-START) - (key_val-START);
