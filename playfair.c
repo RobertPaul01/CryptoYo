@@ -190,6 +190,13 @@ void decrypt_playfair(char* message, char* key) {
 }
 
 int playfair_test_cases() {
+	char test_cases[5][3][100] =
+		{{"", "", ""},
+		{"", "", ""}, 
+		{"", "", ""}, 
+		{"", "", ""}, 
+		{"", "", ""}}; 
+
 	return 1;
 }
 
@@ -201,9 +208,9 @@ int main() {
 	char test[100] = "WHAT IS GOING ON MATE JJJIIIIJJJIJII";
 	char key[100] = "HELLO THERE BUD";
 	printf("%s\n", test);
-	encrypt_playfair(&test[0], &key[0]);
+	encrypt_playfair(test, key);
 	printf("%s\n", test);
-	decrypt_playfair(&test[0], &key[0]);
+	decrypt_playfair(test, key);
 	printf("%s\n", test);
 	return 0;
 }
